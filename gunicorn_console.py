@@ -12,10 +12,11 @@ screen_delay = .01 # Seconds between screen updates.
 ps_delay = 2 # Seconds between ps updates.
 tick = 0 # Internal counter incremented in main event loop.
 title = "(`\._./`\._.-> gunicorn-console <-._./`\._./`)"
-instructions = """(a)dd worker | (k)ill worker | (r)eload master | (q)uit
+instructions = """(r)eload master | (a)dd worker
+kill (w)orker | kill (m)aster | (q)uit
 up/down changes selection
 """
-no_gunicorns = "Aww, no gunicorns are running."
+no_gunicorns = "Aww, no gunicorns are running!!"
 screen_width = None
 foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_BLUE
@@ -36,6 +37,8 @@ def move_selection(reverse=False):
     the currently selected.
     """
     global selected
+    if selected not in gunicorns:
+        selected = None
     found = False
     items = sorted(gunicorns.keys(), reverse=reverse)
     # Iterate items twice to enable wrapping.
@@ -88,12 +91,15 @@ def handle_keypress(screen):
     elif key in ("A", "+"):
         send_signal("TTIN")
         gunicorns[selected]["workers"] = 0
-    elif key in ("K", "-"):
+    elif key in ("W", "-"):
         if gunicorns[selected]["workers"] != 1:
             send_signal("TTOU")
             gunicorns[selected]["workers"] = 0
     elif key in ("R",):
         send_signal("HUP")
+        del gunicorns[selected]
+    elif key in ("M", "-"):
+        send_signal("QUIT")
         del gunicorns[selected]
     elif key in ("Q",):
         raise KeyboardInterrupt
@@ -114,7 +120,10 @@ def display_output(screen):
     Display the menu list of gunicorns and the status message.
     """
     format_row("", "", "", "")
-    win = curses.newwin(len(gunicorns) + 12, screen_width + 6, 1, 3)
+    screen_height = len(gunicorns) + len(instructions.split("\n")) + 9
+    if not gunicorns:
+        screen_height += 2
+    win = curses.newwin(screen_height, screen_width + 6, 1, 3)
     win.bkgd(" ", curses.color_pair(1))
     win.border()
     x = 3
