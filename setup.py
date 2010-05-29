@@ -8,7 +8,7 @@ setup(
     author = "Stephen McDonald",
     author_email = "stephen.mc@gmail.com",
     description = "A curses application for managing gunicorn processes",
-    long_description = open("README").read(),
+    long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://bitbucket.org/stephenmcd/gunicorn-console/",
     py_modules = ["gunicorn_console",],
