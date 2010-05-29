@@ -107,6 +107,7 @@ def handle_keypress(screen):
     """
     Check for a key being pressed and handle it if applicable.
     """
+    global selected_pid
     try:
         key = screen.getkey().upper()
     except:
@@ -125,9 +126,11 @@ def handle_keypress(screen):
     elif key in ("R",):
         send_signal("HUP")
         del gunicorns[selected_pid]
+        selected_pid = None
     elif key in ("M", "-"):
         send_signal("QUIT")
         del gunicorns[selected_pid]
+        selected_pid = None
     elif key in ("Q",):
         raise KeyboardInterrupt
 
