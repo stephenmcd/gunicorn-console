@@ -7,7 +7,7 @@ setup(
     version = __import__("gunicorn_console").__version__,
     author = "Stephen McDonald",
     author_email = "stephen.mc@gmail.com",
-    description = "A curses application for managing gunicorn processes",
+    description = "A curses application for managing gunicorn processes.",
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/stephenmcd/gunicorn-console/",
