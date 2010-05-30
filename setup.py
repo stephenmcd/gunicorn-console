@@ -10,7 +10,7 @@ setup(
     description = "A curses application for managing gunicorn processes",
     long_description = open("README.rst").read(),
     license = "BSD",
-    url = "http://bitbucket.org/stephenmcd/gunicorn-console/",
+    url = "http://github.com/stephenmcd/gunicorn-console/",
     py_modules = ["gunicorn_console",],
     classifiers = [
         "Development Status :: 4 - Beta",
