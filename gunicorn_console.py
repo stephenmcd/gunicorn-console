@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import curses
 from itertools import count
 from subprocess import Popen, PIPE
@@ -21,6 +22,11 @@ no_gunicorns = "Aww, no gunicorns are running!!"
 screen_width = None
 foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_BLUE
+
+if sys.platform == 'darwin':
+    PS_ARGS = ['ps', '-fx']
+else:
+    PS_ARGS = ['ps', 'x', "-Fe"]
 
 
 def send_signal(signal):
@@ -63,7 +69,7 @@ def update_gunicorns():
     tick = 0
     for pid in gunicorns:
         gunicorns[pid].update({"workers": 0, "mem": 0})
-    ps = Popen(["ps", "x", "-Fe"], stdout=PIPE).communicate()[0].split("\n")
+    ps = Popen(PS_ARGS, stdout=PIPE).communicate()[0].split("\n")
     headings = ps.pop(0).split()
     name_col = headings.index("CMD")
     num_cols = len(headings) - 1
@@ -206,7 +212,9 @@ if __name__ == "__main__":
     curses.noecho()
     stdscr.keypad(True)
     stdscr.nodelay(True)
-    curses.curs_set(False)
+    try:
+        curses.curs_set(False)
+    except: pass
     # Run main event loop until quit.
     while True:
         try:
