@@ -94,7 +94,8 @@ def update_gunicorns():
     # Determine ports if any are missing.
     if not any([g for g in gunicorns.values() if g["port"] is None]):
         return
-    netstat = Popen(["netstat","-lp"], stdout=PIPE, stderr=PIPE).communicate()[0].split("\n")
+    netstat = Popen(["netstat","-lpn"], stdout=PIPE, 
+        stderr=PIPE).communicate()[0].split("\n")
     addr_pos = None
     pid_pos = None
     addr_heading = "Local Address"
