@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from sys import platform
 
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 gunicorns = {} # gunicorn master process names/pids.
 selected_pid = None # Process ID of currently selected gunicorn master process.
@@ -90,7 +90,7 @@ def update_gunicorns():
     # Remove gunicorns that were not found in the process list.
     for pid in gunicorns.keys()[:]:
         if gunicorns[pid]["workers"] == 0:
-            del gunicorns[name]
+            del gunicorns[pid]
     # Determine ports if any are missing.
     if not [g for g in gunicorns.values() if g["port"] is None]:
         return
