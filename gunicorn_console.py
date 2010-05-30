@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import sys
 import curses
 from itertools import count
 from subprocess import Popen, PIPE
+from sys import platform
 
 
 __version__ = "0.1"
@@ -23,10 +23,10 @@ screen_width = None
 foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_BLUE
 
-if sys.platform == 'darwin':
-    PS_ARGS = ['ps', '-fx']
+if platform == "darwin":
+    PS_ARGS = ["ps", "-fx"]
 else:
-    PS_ARGS = ['ps', 'x', "-Fe"]
+    PS_ARGS = ["ps", "x", "-Fe"]
 
 
 def send_signal(signal):
@@ -214,8 +214,8 @@ if __name__ == "__main__":
     stdscr.nodelay(True)
     try:
         curses.curs_set(False)
-    except: pass
-
+    except:
+        pass
     try:
         # Run main event loop until quit.
         while True:
