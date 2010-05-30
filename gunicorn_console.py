@@ -215,18 +215,20 @@ if __name__ == "__main__":
     try:
         curses.curs_set(False)
     except: pass
-    # Run main event loop until quit.
-    while True:
-        try:
-            update_gunicorns()
-            handle_keypress(stdscr)
-            display_output(stdscr)
-            curses.napms(int(screen_delay * 1000))
-        except KeyboardInterrupt:
-            break
-    # Tear down curses.
-    curses.nocbreak()
-    stdscr.keypad(False)
-    curses.echo()
-    curses.endwin()
 
+    try:
+        # Run main event loop until quit.
+        while True:
+            try:
+                update_gunicorns()
+                handle_keypress(stdscr)
+                display_output(stdscr)
+                curses.napms(int(screen_delay * 1000))
+            except KeyboardInterrupt:
+                break
+    finally:
+        # Tear down curses.
+        curses.nocbreak()
+        stdscr.keypad(False)
+        curses.echo()
+        curses.endwin()
