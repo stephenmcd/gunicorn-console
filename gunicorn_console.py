@@ -125,19 +125,23 @@ def handle_keypress(screen):
         move_selection(reverse=True)
     elif key in ("A", "+"):
         send_signal("TTIN")
-        gunicorns[selected_pid]["workers"] = 0
-    elif key in ("W", "-"):
-        if gunicorns[selected_pid]["workers"] != 1:
-            send_signal("TTOU")
+        if selected_pid in gunicorns:
             gunicorns[selected_pid]["workers"] = 0
+    elif key in ("W", "-"):
+        if selected_pid in gunicorns:
+            if gunicorns[selected_pid]["workers"] != 1:
+                send_signal("TTOU")
+                gunicorns[selected_pid]["workers"] = 0
     elif key in ("R",):
-        send_signal("HUP")
-        del gunicorns[selected_pid]
-        selected_pid = None
+        if selected_pid in gunicorns:
+            send_signal("HUP")
+            del gunicorns[selected_pid]
+            selected_pid = None
     elif key in ("M", "-"):
-        send_signal("QUIT")
-        del gunicorns[selected_pid]
-        selected_pid = None
+        if selected_pid in gunicorns:
+            send_signal("QUIT")
+            del gunicorns[selected_pid]
+            selected_pid = None
     elif key in ("Q",):
         raise KeyboardInterrupt
 
