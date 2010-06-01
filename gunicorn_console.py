@@ -150,8 +150,7 @@ def format_row(pid="", port="", name="", mem="", workers=""):
     Applies consistant padding to each of the columns in a row and serves as 
     the source of the overall screen width.
     """
-    row = " %s %s %s %s %s " % (str(pid).ljust(5), str(port).ljust(6), 
-        str(name).ljust(25), str(mem).rjust(8), str(workers).rjust(7))
+    row = " %-5s %-6s %-25s %8s %7s " % (pid, port, name, mem, workers)
     global screen_width
     if screen_width is None:
         screen_width = len(row)
