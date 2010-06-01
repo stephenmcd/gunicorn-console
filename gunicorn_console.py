@@ -119,9 +119,9 @@ def handle_keypress(screen):
         key = screen.getkey().upper()
     except:
         return
-    if key == "KEY_DOWN":
+    if key in ["KEY_DOWN", "J"]:
         move_selection()
-    elif key == "KEY_UP":
+    elif key in ["KEY_UP", "K"]:
         move_selection(reverse=True)
     elif key in ("A", "+"):
         send_signal("TTIN")
