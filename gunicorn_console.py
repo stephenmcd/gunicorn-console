@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from sys import platform
 
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 gunicorns = {} # gunicorn master process names/pids.
 selected_pid = None # Process ID of currently selected gunicorn master process.
@@ -119,9 +119,9 @@ def handle_keypress(screen):
         key = screen.getkey().upper()
     except:
         return
-    if key in ["KEY_DOWN", "J"]:
+    if key in ("KEY_DOWN", "J"):
         move_selection()
-    elif key in ["KEY_UP", "K"]:
+    elif key in ("KEY_UP", "K"):
         move_selection(reverse=True)
     elif key in ("A", "+"):
         send_signal("TTIN")
