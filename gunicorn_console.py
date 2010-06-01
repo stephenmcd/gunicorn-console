@@ -24,7 +24,7 @@ foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_BLUE
 
 if platform == "darwin":
-    PS_ARGS = ["ps", "-fx"]
+    PS_ARGS = ["ps", "-lx"]
 else:
     PS_ARGS = ["ps", "x", "-Fe"]
 
