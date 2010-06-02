@@ -25,8 +25,45 @@ background_colour = curses.COLOR_BLUE
 
 if platform == "darwin":
     PS_ARGS = ["ps", "-lx"]
+    def ports_for_pids(pids):
+        LSOF_ARGS = ["lsof", "-i", "-n", "-P"]
+        # lsof is an external command, so won't always be present
+        try:
+            lsof = Popen(LSOF_ARGS, stdout=PIPE,
+                stderr=PIPE).communicate()[0].split("\n")
+        except:
+            return
+        addr_pos = None
+        pid_pos = None
+        addr_heading = "NAME"
+        pid_heading = "PID"
+        for row in lsof:
+            if addr_heading in row and pid_heading in row:
+                addr_pos = row.index(addr_heading)
+                pid_pos = row.index(pid_heading)-2
+            if addr_pos is not None:
+                pid = row[pid_pos:].split(" ")[0]
+                if pid in pids:
+                    port = row[addr_pos:].split(":")[1].split(" ", 1)[0]
+                    yield (pid, port)
 else:
     PS_ARGS = ["ps", "x", "-Fe"]
+    def ports_for_pids(pids):
+        netstat = Popen(["netstat","-lpn"], stdout=PIPE,
+            stderr=PIPE).communicate()[0].split("\n")
+        addr_pos = None
+        pid_pos = None
+        addr_heading = "Local Address"
+        pid_heading = "PID/Program name"
+        for row in netstat:
+            if addr_heading in row and pid_heading in row:
+                addr_pos = row.index(addr_heading)
+                pid_pos = row.index(pid_heading)
+            if addr_pos is not None:
+                pid = row[pid_pos:].split("/")[0]
+                if pid in pids:
+                    port = row[addr_pos:].split(" ", 1)[0].split(":")[1]
+                    yield (pid, port)
 
 
 def send_signal(signal):
@@ -94,21 +131,9 @@ def update_gunicorns():
     # Determine ports if any are missing.
     if not [g for g in gunicorns.values() if g["port"] is None]:
         return
-    netstat = Popen(["netstat","-lpn"], stdout=PIPE, 
-        stderr=PIPE).communicate()[0].split("\n")
-    addr_pos = None
-    pid_pos = None
-    addr_heading = "Local Address"
-    pid_heading = "PID/Program name"
-    for row in netstat :
-        if addr_heading in row and pid_heading in row:
-            addr_pos = row.index(addr_heading)
-            pid_pos = row.index(pid_heading)
-        if addr_pos is not None:
-            pid = row[pid_pos:].split("/")[0]
-            if pid in gunicorns:
-                port = row[addr_pos:].split(" ", 1)[0].split(":")[1]
-                gunicorns[pid]["port"] = port
+    for (pid, port) in ports_for_pids(gunicorns.keys()):
+        if pid in gunicorns:
+            gunicorns[pid]["port"] = port
 
 def handle_keypress(screen):
     """
@@ -150,8 +175,7 @@ def format_row(pid="", port="", name="", mem="", workers=""):
     Applies consistant padding to each of the columns in a row and serves as 
     the source of the overall screen width.
     """
-    row = " %s %s %s %s %s " % (str(pid).ljust(5), str(port).ljust(6), 
-        str(name).ljust(25), str(mem).rjust(8), str(workers).rjust(7))
+    row = " %-5s %-6s %-25s %8s %7s " % (pid, port, name, mem, workers)
     global screen_width
     if screen_width is None:
         screen_width = len(row)
