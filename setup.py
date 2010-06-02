@@ -11,7 +11,7 @@ setup(
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/stephenmcd/gunicorn-console/",
-    py_modules = ["gunicorn_console",],
+    scripts = ["gunicorn_console.py",],
     classifiers = [
         "Development Status :: 4 - Beta",
         "Environment :: Console :: Curses",
