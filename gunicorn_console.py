@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 from sys import platform
 
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 
 gunicorns = {} # gunicorn master process names/pids.
 selected_pid = None # Process ID of currently selected gunicorn master process.
@@ -233,7 +233,10 @@ def display_output(screen):
         win.addstr(y(), x, line.center(screen_width), curses.A_NORMAL)
     win.refresh()
 
-if __name__ == "__main__":
+def main():
+    """
+    Main entry point for gunicorn_console.
+    """
     # Set up curses.
     stdscr = curses.initscr()
     curses.start_color()
@@ -261,3 +264,7 @@ if __name__ == "__main__":
         stdscr.keypad(False)
         curses.echo()
         curses.endwin()
+
+if __name__ == "__main__":
+    main()
+

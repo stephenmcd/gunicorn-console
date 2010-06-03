@@ -1,5 +1,5 @@
 
-from distutils.core import setup
+from setuptools import setup
  
  
 setup(
@@ -11,7 +11,11 @@ setup(
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/stephenmcd/gunicorn-console/",
-    scripts = ["gunicorn_console.py",],
+    py_modules = ["gunicorn_console",],
+    entry_points = """
+        [console_scripts]
+        gunicorn-console=gunicorn_console:main
+    """,
     classifiers = [
         "Development Status :: 4 - Beta",
         "Environment :: Console :: Curses",

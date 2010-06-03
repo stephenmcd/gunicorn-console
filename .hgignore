@@ -3,5 +3,6 @@ syntax: glob
 *.pyo
 build/*
 dist/*
+gunicorn_console.egg-info/*
 MANIFEST
 
