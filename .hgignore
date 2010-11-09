@@ -4,5 +4,3 @@ syntax: glob
 build/*
 dist/*
 gunicorn_console.egg-info/*
-MANIFEST
-
