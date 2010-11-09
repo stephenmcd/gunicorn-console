@@ -12,6 +12,7 @@ setup(
     license = "BSD",
     url = "http://github.com/stephenmcd/gunicorn-console/",
     py_modules = ["gunicorn_console",],
+    install_requires = ["setproctitle",],
     entry_points = """
         [console_scripts]
         gunicorn-console=gunicorn_console:main
