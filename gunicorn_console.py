@@ -23,6 +23,7 @@ screen_width = None
 foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_BLUE
 
+
 if platform == "darwin":
     PS_ARGS = ["ps", "-lx"]
     def ports_for_pids(pids):
@@ -74,6 +75,7 @@ def send_signal(signal):
     if selected_pid in gunicorns:
         Popen(["kill", "-%s" % signal, selected_pid])
     curses.flash()
+
         
 def move_selection(reverse=False):
     """
@@ -91,6 +93,7 @@ def move_selection(reverse=False):
             selected_pid = pid
             return
         found = pid == selected_pid
+
 
 def update_gunicorns(): 
     """
@@ -135,6 +138,7 @@ def update_gunicorns():
         if pid in gunicorns:
             gunicorns[pid]["port"] = port
 
+
 def handle_keypress(screen):
     """
     Check for a key being pressed and handle it if applicable.
@@ -170,6 +174,7 @@ def handle_keypress(screen):
     elif key in ("Q",):
         raise KeyboardInterrupt
 
+
 def format_row(pid="", port="", name="", mem="", workers=""):
     """
     Applies consistant padding to each of the columns in a row and serves as 
@@ -180,6 +185,7 @@ def format_row(pid="", port="", name="", mem="", workers=""):
     if screen_width is None:
         screen_width = len(row)
     return row
+
 
 def display_output(screen):
     """
@@ -233,6 +239,7 @@ def display_output(screen):
         win.addstr(y(), x, line.center(screen_width), curses.A_NORMAL)
     win.refresh()
 
+
 def main():
     """
     Main entry point for gunicorn_console.
@@ -265,6 +272,6 @@ def main():
         curses.echo()
         curses.endwin()
 
+
 if __name__ == "__main__":
     main()
-
