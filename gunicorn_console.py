@@ -175,12 +175,14 @@ def handle_keypress(screen):
         raise KeyboardInterrupt
 
 
-def format_row(pid="", port="", name="", mem="", workers=""):
+def format_row(pid="", port="", name="", mem="", workers="", prefix_char=" "):
     """
     Applies consistant padding to each of the columns in a row and serves as 
     the source of the overall screen width.
     """
-    row = " %-5s %-6s %-25s %8s %7s " % (pid, port, name, mem, workers)
+    row = "%s%-5s %-6s %-25s %8s %7s " \
+          % (prefix_char, pid, port, name, mem, workers)
+
     global screen_width
     if screen_width is None:
         screen_width = len(row)
@@ -230,9 +232,12 @@ def display_output(screen):
                 workers = chars[workers]
             if pid == selected_pid:
                 attr = curses.A_STANDOUT
+                prefix_char = '>'
             else:
                 attr = curses.A_NORMAL
-            win.addstr(y(), x, format_row(pid, port, name, mem, workers), attr)
+                prefix_char = ' '
+            win.addstr(y(), x, format_row(pid, port, name, mem, workers,
+                                          prefix_char), attr)
     win.hline(y(), x, curses.ACS_HLINE, screen_width)
     blank_line()
     for line in instructions.split("\n"):
