@@ -205,7 +205,7 @@ def display_output(screen):
     blank_line = y = count(2).next
     win.addstr(y(), x, title.center(screen_width), curses.A_NORMAL)
     blank_line()
-    win.addstr(y(), x, format_row("PID", "PORT", "NAME", "MEM (MB)", "WORKERS"), 
+    win.addstr(y(), x, format_row(" PID", "PORT", "NAME", "MEM (MB)", "WORKERS"), 
         curses.A_STANDOUT)
     if not gunicorns:
         blank_line()
@@ -232,10 +232,10 @@ def display_output(screen):
                 workers = chars[workers]
             if pid == selected_pid:
                 attr = curses.A_STANDOUT
-                prefix_char = '>'
+                prefix_char = '> '
             else:
                 attr = curses.A_NORMAL
-                prefix_char = ' '
+                prefix_char = '  '
             win.addstr(y(), x, format_row(pid, port, name, mem, workers,
                                           prefix_char), attr)
     win.hline(y(), x, curses.ACS_HLINE, screen_width)
