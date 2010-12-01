@@ -14,7 +14,7 @@ except ImportError:
     exit()
 
 
-__version__ = "0.1.10"
+__version__ = "0.1.11"
 
 gunicorns = {} # gunicorn master process names/pids.
 selected_pid = None # Process ID of currently selected gunicorn master process.
