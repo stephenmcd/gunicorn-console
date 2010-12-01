@@ -3,7 +3,15 @@
 import curses
 from itertools import count
 from subprocess import Popen, PIPE
-from sys import platform
+from sys import platform, exit
+
+try:
+    import setproctitle
+except ImportError:
+    print
+    print "\033[91mError: You must install the setproctitle package.\033[0m"
+    print
+    exit()
 
 
 __version__ = "0.1.10"
