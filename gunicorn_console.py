@@ -77,17 +77,17 @@ else:
 
 def send_signal(signal):
     """
-    Send the signal to the selected master gunicorn process and show the given 
+    Send the signal to the selected master gunicorn process and show the given
     message as the current status.
     """
     if selected_pid in gunicorns:
         Popen(["kill", "-%s" % signal, selected_pid])
     curses.flash()
 
-        
+
 def move_selection(reverse=False):
     """
-    Goes through the list of gunicorns, setting the selected as the one after 
+    Goes through the list of gunicorns, setting the selected as the one after
     the currently selected.
     """
     global selected_pid
@@ -103,11 +103,11 @@ def move_selection(reverse=False):
         found = pid == selected_pid
 
 
-def update_gunicorns(): 
+def update_gunicorns():
     """
-    Updates the dict of gunicorn processes. Run the ps command and parse its 
-    output for processes named after gunicorn, building up a dict of gunicorn 
-    processes. When new gunicorns are discovered, run the netstat command to 
+    Updates the dict of gunicorn processes. Run the ps command and parse its
+    output for processes named after gunicorn, building up a dict of gunicorn
+    processes. When new gunicorns are discovered, run the netstat command to
     determine the ports they're serving on.
     """
     global tick
@@ -130,7 +130,7 @@ def update_gunicorns():
             else:
                 pid = cols[headings.index("PID")]
             if pid not in gunicorns:
-                gunicorns[pid] = {"workers": 0, "mem": 0, "port": None, "name": 
+                gunicorns[pid] = {"workers": 0, "mem": 0, "port": None, "name":
                     cols[name_col].strip().split("[",1)[1][:-1]}
             gunicorns[pid]["mem"] += int(cols[headings.index("RSS")])
             if is_worker:
@@ -185,7 +185,7 @@ def handle_keypress(screen):
 
 def format_row(pid="", port="", name="", mem="", workers="", prefix_char=" "):
     """
-    Applies consistant padding to each of the columns in a row and serves as 
+    Applies consistant padding to each of the columns in a row and serves as
     the source of the overall screen width.
     """
     row = "%s%-5s %-6s %-25s %8s %7s " \
@@ -213,11 +213,11 @@ def display_output(screen):
     blank_line = y = count(2).next
     win.addstr(y(), x, title.center(screen_width), curses.A_NORMAL)
     blank_line()
-    win.addstr(y(), x, format_row(" PID", "PORT", "NAME", "MEM (MB)", "WORKERS"), 
+    win.addstr(y(), x, format_row(" PID", "PORT", "NAME", "MEM (MB)", "WORKERS"),
         curses.A_STANDOUT)
     if not gunicorns:
         blank_line()
-        win.addstr(y(), x, no_gunicorns.center(screen_width), 
+        win.addstr(y(), x, no_gunicorns.center(screen_width),
             curses.A_NORMAL)
         blank_line()
     else:
@@ -227,16 +227,16 @@ def display_output(screen):
             name = gunicorns[pid]["name"]
             mem = "%#.3f" % (gunicorns[pid]["mem"] / 1000.)
             workers = gunicorns[pid]["workers"]
-            # When a signal is sent to update the number of workers, the number 
-            # of workers is set to zero as a marker to signify an update has 
-            # occurred. We then piggyback this variable and use it as a counter 
+            # When a signal is sent to update the number of workers, the number
+            # of workers is set to zero as a marker to signify an update has
+            # occurred. We then piggyback this variable and use it as a counter
             # to animate the display until the gunicorn is next updated.
             if workers < 1:
                 gunicorns[pid]["workers"] -= 1
                 chars = "|/-\\"
                 workers *= -1
                 if workers == len(chars):
-                   gunicorns[pid]["workers"] = workers = 0 
+                   gunicorns[pid]["workers"] = workers = 0
                 workers = chars[workers]
             if pid == selected_pid:
                 attr = curses.A_STANDOUT
