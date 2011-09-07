@@ -1,7 +1,7 @@
 
 from setuptools import setup
- 
- 
+
+
 setup(
     name="gunicorn-console",
     version=__import__("gunicorn_console").__version__,
@@ -12,7 +12,7 @@ setup(
     license="BSD",
     url="http://github.com/stephenmcd/gunicorn-console/",
     py_modules=["gunicorn_console",],
-    install_requires=["setproctitle",],
+    install_requires=["setproctitle", "sphinx-me"],
     entry_points="""
         [console_scripts]
         gunicorn-console=gunicorn_console:main
