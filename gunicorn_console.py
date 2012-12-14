@@ -20,7 +20,7 @@ up/down changes selection
 """
 no_gunicorns = "Aww, no gunicorns are running!!"
 screen_width = None
-foreground_colour = curses.COLOR_BLACK
+foreground_colour = curses.COLOR_GREEN
 background_colour = curses.COLOR_BLUE
 
 
