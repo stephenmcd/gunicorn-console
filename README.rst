@@ -1,7 +1,8 @@
-
 ================
 gunicorn-console
 ================
+
+Created by `Stephen McDonald <http://twitter.com/stephen_mcd>`_
 
 A curses application for managing gunicorn processes. The ``ps`` command is 
 polled for gunicorn processes named with the ``setproctitle`` package and its 

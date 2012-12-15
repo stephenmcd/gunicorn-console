@@ -21,7 +21,7 @@ up/down changes selection
 no_gunicorns = "Aww, no gunicorns are running!!"
 screen_width = None
 foreground_colour = curses.COLOR_BLACK
-background_colour = curses.COLOR_BLUE
+background_colour = curses.COLOR_GREEN
 
 
 if platform == "darwin":
