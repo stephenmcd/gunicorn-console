@@ -181,7 +181,7 @@ def handle_keypress(screen):
         raise KeyboardInterrupt
 
 
-def format_row(pid="", port="", name="", mem="", workers="", prefix_char=" "):
+def format_row(pid="", port="", name="", mem="", workers="", prefix_char="  "):
     """
     Applies consistant padding to each of the columns in a row and serves as
     the source of the overall screen width.
