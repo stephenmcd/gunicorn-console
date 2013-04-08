@@ -14,7 +14,7 @@ screen_delay = .1 # Seconds between screen updates.
 ps_delay = 2 # Seconds between ps updates.
 tick = -1 # Internal counter incremented in main event loop.
 title = "(`\._./`\._.-> gunicorn-console <-._./`\._./`)"
-instructions = """(r)eload master | (a)dd worker
+instructions = """(r)eload master | (t)otal reload | (a)dd worker
 kill (w)orker | kill (m)aster | (q)uit
 up/down changes selection
 """
@@ -163,6 +163,12 @@ def handle_keypress(screen):
                 gunicorns[selected_pid]["workers"] = 0
     elif key in ("R",):
         if selected_pid in gunicorns:
+            send_signal("HUP")
+            del gunicorns[selected_pid]
+            selected_pid = None
+    elif key in ("T",):
+        for pid in gunicorns.copy().iterkeys():
+            selected_pid = pid
             send_signal("HUP")
             del gunicorns[selected_pid]
             selected_pid = None
