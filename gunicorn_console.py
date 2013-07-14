@@ -23,9 +23,14 @@ screen_width = None
 foreground_colour = curses.COLOR_BLACK
 background_colour = curses.COLOR_GREEN
 
+cmd_heading = "CMD"
 
-if platform == "darwin":
+if "freebsd" in platform:
+    cmd_heading = "COMMAND"
+
+if platform == "darwin" or "freebsd" in platform:
     PS_ARGS = ["ps", "-lx"]
+
     def ports_for_pids(pids):
         LSOF_ARGS = ["lsof", "-i", "-n", "-P"]
         # lsof is an external command, so won't always be present
@@ -49,6 +54,7 @@ if platform == "darwin":
                     yield (pid, port)
 else:
     PS_ARGS = ["ps", "x", "-Fe"]
+
     def ports_for_pids(pids):
         netstat = Popen(["netstat","-lpn"], stdout=PIPE,
             stderr=PIPE).communicate()[0].split("\n")
@@ -111,19 +117,23 @@ def update_gunicorns():
         gunicorns[pid].update({"workers": 0, "mem": 0})
     ps = Popen(PS_ARGS, stdout=PIPE).communicate()[0].split("\n")
     headings = ps.pop(0).split()
-    name_col = headings.index("CMD")
+    name_col = headings.index(cmd_heading)
     num_cols = len(headings) - 1
     for row in ps:
         cols = row.split(None, num_cols)
-        if cols and cols[name_col].startswith("gunicorn: "):
-            is_worker = cols[name_col].startswith("gunicorn: worker")
+        if cols and "gunicorn: " in cols[name_col]:
+            if "gunicorn: worker" in cols[name_col]:
+                is_worker = True
+            else:
+                is_worker = False
+
             if is_worker:
                 pid = cols[headings.index("PPID")]
             else:
                 pid = cols[headings.index("PID")]
             if pid not in gunicorns:
                 gunicorns[pid] = {"workers": 0, "mem": 0, "port": None, "name":
-                    cols[name_col].strip().split("[",1)[1][:-1]}
+                    cols[name_col].strip().split("[",1)[1].split("]",1)[:-1]}
             gunicorns[pid]["mem"] += int(cols[headings.index("RSS")])
             if is_worker:
                 gunicorns[pid]["workers"] += 1
