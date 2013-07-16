@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import curses
 from itertools import count
 from subprocess import Popen, PIPE
@@ -25,10 +26,10 @@ background_colour = curses.COLOR_GREEN
 
 cmd_heading = "CMD"
 
-if "freebsd" in platform:
+if re.search("freebsd|openbsd", platform):
     cmd_heading = "COMMAND"
 
-if platform == "darwin" or "freebsd" in platform:
+if re.search("darwin|freebsd|openbsd", platform):
     PS_ARGS = ["ps", "-lx"]
 
     def ports_for_pids(pids):
