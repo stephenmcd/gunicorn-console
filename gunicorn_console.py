@@ -7,7 +7,7 @@ from subprocess import Popen, PIPE
 from sys import platform, exit
 
 
-__version__ = "0.1.15"
+__version__ = "0.1.16"
 
 gunicorns = {} # gunicorn master process names/pids.
 selected_pid = None # Process ID of currently selected gunicorn master process.
